@@ -43,7 +43,7 @@ class	AnonIP( object ):
 	def	obscure( self, mo ):
 		ipaddr = mo.group( 0 )
 		if ipaddr not in self.ip_map:
-			c = self.replacements[ self.which ]
+			c = self.replacements[ self.which ] * 3
 			self.which = (self.which + 1) % self.Nreplacements
 			obscured = '.'.join(
 				[ c ] * 4
