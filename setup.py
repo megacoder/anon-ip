@@ -14,15 +14,16 @@ def	read( fn ):
 		return f.read()
 
 name    = 'anon-ip'
+dirname = 'anon_ip'
 version = '0.0.0rc0'
 
 try:
-	os.makedirs( name )
+	os.makedirs( dirname )
 except:
 	pass
 
 vfile = os.path.join(
-	name,
+	dirname,
 	'version.py'
 )
 with open( vfile, 'w' ) as f:
@@ -41,14 +42,18 @@ setup(
 	),
 	license          = "MIT",
 	keywords         = "awesome impressive waste-of-time",
-	url              = "http://localhost:666",
+	url              = "http://666.666.666.666:666",
 	packages         = [
-		'anon-ip',
+		dirname,
+		# 'tests',
 	],
 	long_description = read( 'README.md' ),
 	classifiers      =[
 		"Development Status :: 0 - Broken",
 		"Topic :: Utilities",
 		"License :: OSI Approved :: MIT",
+	],
+	scripts = [
+		'anon-ip',
 	],
 )
