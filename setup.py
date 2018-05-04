@@ -5,7 +5,7 @@ import	os
 from	setuptools	import	setup
 
 def	read( fn ):
-	for open(
+	with open(
 		os.path.join(
 			os.path.dirname( __file__ ),
 			fn
@@ -14,9 +14,13 @@ def	read( fn ):
 		return f.read()
 
 name    = 'anon-ip'
-version = "0.0.0rc0",
+version = '0.0.0rc0'
 
-os.makedirs( name )
+try:
+	os.makedirs( name )
+except:
+	pass
+
 vfile = os.path.join(
 	name,
 	'version.py'
