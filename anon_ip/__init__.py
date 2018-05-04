@@ -46,7 +46,7 @@ class	AnonIP( object ):
 			c = self.replacements[ self.which ]
 			self.which = (self.which + 1) % self.Nreplacements
 			obscured = '.'.join(
-				[ c ] * 3
+				[ c ] * 4
 			)
 			self.ip_map[ ipaddr ] = obscured
 		return self.ip_map[ ipaddr ]
@@ -134,7 +134,6 @@ class	AnonIP( object ):
 			help    = 'file or directory, else stdin',
 		)
 		self.opts = p.parse_args()
-		print 'opts={0}'.format(self.opts)
 		if len( self.opts.names ) == 0:
 			self.do_file()
 		else:
