@@ -13,9 +13,20 @@ def	read( fn ):
 	) as f:
 		return f.read()
 
+name    = 'anon-ip'
+version = "0.0.0rc0",
+
+os.makedirs( name )
+vfile = os.path.join(
+	name,
+	'version.py'
+)
+with open( vfile, 'w' ) as f:
+	print >>f, "Version = '{0}'".format( version )
+
 setup(
-	name		 = "anon-ip",
-	version		 = "0.0.0rc0",
+	name		 = name,
+	version		 = version,
 	author		 = "Tommy Reynolds",
 	author_email = "Oldest.Software.Guy@Gmail.com",
 	description  = (
@@ -29,7 +40,6 @@ setup(
 	url              = "http://localhost:666",
 	packages         = [
 		'anon-ip',
-		'tests'
 	],
 	long_description = read( 'README.md' ),
 	classifiers      =[
