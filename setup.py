@@ -15,7 +15,7 @@ def	read( fn ):
 
 name    = 'anon-ip'
 dirname = 'anon_ip'
-version = '0.0.0rc0'
+version = '0.0.0rc1'
 
 try:
 	os.makedirs( dirname )
