@@ -17,6 +17,7 @@ class	AnonIP( object ):
 	def	__init__( self ):
 		self.opts = dict({
 			'show_ip_map' : False,
+			'obs_offset'  : 0,
 		})
 		return
 
@@ -43,8 +44,9 @@ class	AnonIP( object ):
 	def	obscure( self, mo ):
 		ipaddr = mo.group( 0 )
 		if ipaddr not in self.ip_map:
-			c = self.replacements[ self.which ] * 3
-			self.which = (self.which + 1) % self.Nreplacements
+			pos = (self.which + self.opts.obs_offset) % self.Nreplacements
+			c = self.replacements[ pos ] * 3
+			self.which += 1
 			obscured = '.'.join(
 				[ c ] * 4
 			)
@@ -117,6 +119,15 @@ class	AnonIP( object ):
 			dest   = 'show_ip_map',
 			action = 'store_true',
 			help   = 'show IP mapping table',
+		)
+		p.add_argument(
+			'-O',
+			'--offset',
+			dest    = 'obs_offset',
+			type    = int,
+			metavar = 'N',
+			default = 0,
+			help    = 'pick obscuring characters later',
 		)
 		p.add_argument(
 			'-v',
