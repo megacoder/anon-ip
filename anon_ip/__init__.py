@@ -17,8 +17,9 @@ class	AnonIP( object ):
 	def	__init__( self ):
 		self.opts = dict({
 			'show_ip_map' : False,
-			'obs_offset'  : 0,
 		})
+		self.replacements = 'abcdefhijklmnopqrstvwxyz' + 'ABCDEFHIJKLMNOPQRSTVWXYZ'
+		self.Nreplacements = len( self.replacements )
 		return
 
 	def	process( self, name ):
@@ -44,9 +45,8 @@ class	AnonIP( object ):
 	def	obscure( self, mo ):
 		ipaddr = mo.group( 0 )
 		if ipaddr not in self.ip_map:
-			pos = (self.which + self.opts.obs_offset) % self.Nreplacements
-			c = self.replacements[ pos ] * 3
-			self.which += 1
+			c = self.replacements[ self.which ] * 3
+			self.which = (self.which + 1) % self.Nreplacements
 			obscured = '.'.join(
 				[ c ] * 4
 			)
@@ -54,28 +54,38 @@ class	AnonIP( object ):
 		return self.ip_map[ ipaddr ]
 
 	def	do_file( self, f = sys.stdin ):
-		self.replacements = 'abcdefhijklmnopqrstvwxyz' + 'ABCDEFHIJKLMNOPQRSTVWXYZ'
-		self.Nreplacements = len( self.replacements )
 		self.which = 0
 		octet = r'[0-9]{1,3}'
 		pattern = r'[.]'.join( [ octet ] * 4 )
 		self.ip_map = dict()
+		lines = list()
 		for line in f:
-			print re.sub( pattern, self.obscure, line.rstrip() )
+			lines.append(
+				re.sub( pattern, self.obscure, line.rstrip() )
+			)
 		if self.opts.show_ip_map:
-			print
-			print
 			title = 'Anonamization IP Map'
 			print title
 			print '=' * len( title )
 			print
 			fmt = '{0:15}  {1:15}'
-			subtitle = fmt.format( 'Obscurred', 'Original' )
-			print subtitle
-			print '-' * len( subtitle )
+			print fmt.format( 'Obscurred', 'Original' )
+			print fmt.format( '-' * 15, '-' * 15 )
 			for k in sorted( self.ip_map, key = lambda k : self.ip_map[k] ):
 				print fmt.format( self.ip_map[ k ], k )
-
+			print
+			print
+			width = max(
+				map(
+					len,
+					lines
+				)
+			)
+			fmt = '{{0:{0}}}'.format( width )
+			print fmt.format( 'Obscurred File Contents' )
+			print fmt.format( '-' * width )
+		for line in lines:
+			print line
 		return
 
 	def	process( self, name ):
@@ -114,20 +124,11 @@ class	AnonIP( object ):
 			'''
 		)
 		p.add_argument(
-			'-i',
-			'--ip-map',
+			'-m',
+			'--show-ip-map',
 			dest   = 'show_ip_map',
 			action = 'store_true',
 			help   = 'show IP mapping table',
-		)
-		p.add_argument(
-			'-O',
-			'--offset',
-			dest    = 'obs_offset',
-			type    = int,
-			metavar = 'N',
-			default = 0,
-			help    = 'pick obscuring characters later',
 		)
 		p.add_argument(
 			'-v',
