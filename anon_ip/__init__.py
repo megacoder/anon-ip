@@ -60,22 +60,34 @@ class	AnonIP( object ):
 		octet = r'[0-9]{1,3}'
 		pattern = r'[.]'.join( [ octet ] * 4 )
 		self.ip_map = dict()
+		lines = list()
 		for line in f:
-			print re.sub( pattern, self.obscure, line.rstrip() )
+			lines.append(
+				re.sub( pattern, self.obscure, line.rstrip() )
+			)
 		if self.opts.show_ip_map:
-			print
-			print
 			title = 'Anonamization IP Map'
 			print title
 			print '=' * len( title )
 			print
 			fmt = '{0:15}  {1:15}'
-			subtitle = fmt.format( 'Obscurred', 'Original' )
-			print subtitle
-			print '-' * len( subtitle )
+			print fmt.format( 'Obscurred', 'Original' )
+			print fmt.format( '-' * 15, '-' * 15 )
 			for k in sorted( self.ip_map, key = lambda k : self.ip_map[k] ):
 				print fmt.format( self.ip_map[ k ], k )
-
+			print
+			print
+			width = max(
+				map(
+					len,
+					lines
+				)
+			)
+			fmt = '{{0:{0}}}'.format( width )
+			print fmt.format( 'Obscurred File Contents' )
+			print fmt.format( '-' * width )
+		for line in lines:
+			print line
 		return
 
 	def	process( self, name ):
