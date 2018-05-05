@@ -18,7 +18,9 @@ class	AnonIP( object ):
 		self.opts = dict({
 			'show_ip_map' : False,
 			'obs_offset'  : 0,
-		})
+		}),
+		self.alphabet = 'abcdefhijklmnopqrstvwxyz' + 'ABCDEFHIJKLMNOPQRSTVWXYZ'
+		self.Nalphabet = len( self.alphabet )
 		return
 
 	def	process( self, name ):
@@ -44,8 +46,8 @@ class	AnonIP( object ):
 	def	obscure( self, mo ):
 		ipaddr = mo.group( 0 )
 		if ipaddr not in self.ip_map:
-			pos = (self.which + self.opts.obs_offset) % self.Nreplacements
-			c = self.replacements[ pos ] * 3
+			pos = (self.which + self.opts.obs_offset) % self.Nalphabet
+			c = self.alphabet[ pos ] * 3
 			self.which += 1
 			obscured = '.'.join(
 				[ c ] * 4
@@ -54,8 +56,6 @@ class	AnonIP( object ):
 		return self.ip_map[ ipaddr ]
 
 	def	do_file( self, f = sys.stdin ):
-		self.replacements = 'abcdefhijklmnopqrstvwxyz' + 'ABCDEFHIJKLMNOPQRSTVWXYZ'
-		self.Nreplacements = len( self.replacements )
 		self.which = 0
 		octet = r'[0-9]{1,3}'
 		pattern = r'[.]'.join( [ octet ] * 4 )
@@ -114,6 +114,14 @@ class	AnonIP( object ):
 			'''
 		)
 		p.add_argument(
+			'-a',
+			'--alphabet',
+			metavar = 'CHARS',
+			dest    = 'alphabet',
+			default = None,
+			help    = 'choose from these charaters, in this order',
+		)
+		p.add_argument(
 			'-i',
 			'--ip-map',
 			dest   = 'show_ip_map',
@@ -128,6 +136,13 @@ class	AnonIP( object ):
 			metavar = 'N',
 			default = 0,
 			help    = 'pick obscuring characters later',
+		)
+		p.add_argument(
+			'-o',
+			'--out',
+			dest    = 'ofile',
+			default = None,
+			help    = 'output to here instead of stdout',
 		)
 		p.add_argument(
 			'-v',
@@ -145,6 +160,11 @@ class	AnonIP( object ):
 			help    = 'file or directory, else stdin',
 		)
 		self.opts = p.parse_args()
+		if self.opts.ofile:
+			sys.stdout = open( self.opts.ofile, 'w' )
+		if self.opts.alphabet:
+			self.alphabet  = self.opts.alphabet
+			self.Nalphabet = len( self.alphabet )
 		if len( self.opts.names ) == 0:
 			self.do_file()
 		else:
