@@ -4,6 +4,10 @@
 import	os
 from	setuptools	import	setup
 
+name    = 'anon-ip'
+dirname = 'anon_ip'
+version = '0.0.0rc2'
+
 def	read( fn ):
 	with open(
 		os.path.join(
@@ -12,10 +16,6 @@ def	read( fn ):
 		)
 	) as f:
 		return f.read()
-
-name    = 'anon-ip'
-dirname = 'anon_ip'
-version = '0.0.0rc1'
 
 try:
 	os.makedirs( dirname )
