@@ -122,8 +122,8 @@ class	AnonIP( object ):
 			help    = 'choose from these charaters, in this order',
 		)
 		p.add_argument(
-			'-i',
-			'--ip-map',
+			'-m',
+			'--map',
 			dest   = 'show_ip_map',
 			action = 'store_true',
 			help   = 'show IP mapping table',
