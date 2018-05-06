@@ -66,7 +66,7 @@ class	AnonIP( object ):
 				re.sub( pattern, self.obscure, line.rstrip() )
 			)
 		if self.opts.show_ip_map:
-			title = 'Anonamization IP Map'
+			title = 'Anonymization IP Map'
 			print title
 			print '=' * len( title )
 			print
