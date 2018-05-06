@@ -1,3 +1,3 @@
-# Anonomize Embedded IPv4 Addresses
+# Anonymize Embedded IPv4 Addresses
 ## Standby To Be Amazed
 Well, maybe it's not *that* good.
