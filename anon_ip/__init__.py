@@ -10,7 +10,7 @@ import	re
 try:
 	from version import Version
 except:
-	Version = '0.0.0rc0'
+	Version = 'X.X.XrcX (devel)'
 
 class	AnonIP( object ):
 
@@ -18,9 +18,12 @@ class	AnonIP( object ):
 		self.opts = dict({
 			'show_ip_map' : False,
 			'obs_offset'  : 0,
+			'retain'      : False,
 		}),
 		self.alphabet = 'abcdefhijklmnopqrstvwxyz' + 'ABCDEFHIJKLMNOPQRSTVWXYZ'
 		self.Nalphabet = len( self.alphabet )
+		self.ip_map = dict()
+		self.which = 0
 		return
 
 	def	process( self, name ):
@@ -56,10 +59,12 @@ class	AnonIP( object ):
 		return self.ip_map[ ipaddr ]
 
 	def	do_file( self, f = sys.stdin ):
-		self.which = 0
 		octet = r'[0-9]{1,3}'
 		pattern = r'[.]'.join( [ octet ] * 4 )
-		self.ip_map = dict()
+		if not self.opts.retain:
+			# Discard any prior mappings
+			self.ip_map = dict()
+			self.which = 0
 		lines = list()
 		for line in f:
 			lines.append(
@@ -155,6 +160,13 @@ class	AnonIP( object ):
 			dest    = 'ofile',
 			default = None,
 			help    = 'output to here instead of stdout',
+		)
+		p.add_argument(
+			'-r',
+			'--retain',
+			dest = 'retain',
+			action = 'store_true',
+			help = 'retain IP map between files',
 		)
 		p.add_argument(
 			'-v',

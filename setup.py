@@ -6,7 +6,7 @@ from	setuptools	import	setup
 
 name    = 'anon-ip'
 dirname = 'anon_ip'
-version = '0.0.0rc2'
+version = '0.0.0rc3'
 
 def	read( fn ):
 	with open(
